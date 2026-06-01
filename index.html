@@ -3086,9 +3086,14 @@ Si le fichier n'existe pas, réponds : {"error": "not_found"}`,
   );
 }
 
-const { useState, useMemo, useRef, useEffect } = React;
-const rootElement = document.getElementById('root');
-ReactDOM.createRoot(rootElement).render(React.createElement(App));
+if (typeof ReactDOM !== 'undefined' && typeof App !== 'undefined') {
+    const rootElement = document.getElementById('root');
+    if (rootElement) {
+        const root = ReactDOM.createRoot(rootElement);
+        root.render(React.createElement(App));
+    }
+}
+
 </script>
 </body>
 </html>
