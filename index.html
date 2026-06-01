@@ -1,289 +1,558 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carnet Sanitaire Bovin</title>
-    <!-- Chargement des bibliothèques React et Babel pour le navigateur -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <style>
-        :root {
-            --primary-color: #2e7d32;
-            --primary-light: #e8f5e9;
-            --secondary-color: #1565c0;
-            --warning-color: #ef6c00;
-            --danger-color: #c62828;
-            --text-color: #333333;
-            --bg-color: #f5f5f5;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .card {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        .badge {
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 0.85em;
-        }
-        .badge-success { background-color: var(--primary-light); color: var(--primary-color); }
-        .badge-warning { background-color: #fff3e0; color: var(--warning-color); }
-        .badge-danger { background-color: #ffebee; color: var(--danger-color); }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th { background-color: #f8f9fa; }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        button:hover { opacity: 0.9; }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-    </style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+  <meta name="theme-color" content="#1a3a1a"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Carnet Sanitaire"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <title>Carnet Sanitaire Bovin</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+    body{font-family:'Georgia','Times New Roman',serif;background:#f0f4f0;min-height:100vh}
+    #root{min-height:100vh}
+    /* PWA install banner */
+    #install-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;
+      background:linear-gradient(135deg,#1a3a1a,#2d5a27);color:#fff;
+      padding:14px 16px;align-items:center;gap:12px;box-shadow:0 -4px 20px #0004}
+    #install-banner.show{display:flex}
+    #install-banner .icon{font-size:28px}
+    #install-banner .text{flex:1}
+    #install-banner .text strong{display:block;font-size:14px;font-family:sans-serif}
+    #install-banner .text span{font-size:11px;color:#a8d5a2;font-family:sans-serif}
+    #install-btn{background:#fff;color:#1a3a1a;border:none;border-radius:8px;
+      padding:9px 16px;font-weight:800;font-size:13px;cursor:pointer;font-family:sans-serif;white-space:nowrap}
+    #dismiss-btn{background:transparent;border:none;color:#fff;font-size:20px;cursor:pointer;padding:4px}
+  </style>
+  <script>
+    const manifestData = {
+      name:"Carnet Sanitaire Bovin Lait",
+      short_name:"Carnet Sanitaire",
+      description:"Registre des traitements vétérinaires bovins",
+      start_url:"./",display:"standalone",
+      background_color:"#f0f4f0",theme_color:"#1a3a1a",orientation:"portrait",
+      icons:[
+        {src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%231a3a1a' rx='32'/><text y='130' x='20' font-size='130'>🐄</text></svg>",sizes:"192x192",type:"image/svg+xml"},
+        {src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%231a3a1a' rx='80'/><text y='380' x='40' font-size='380'>🐄</text></svg>",sizes:"512x512",type:"image/svg+xml"}
+      ]
+    };
+    const blob=new Blob([JSON.stringify(manifestData)],{type:'application/manifest+json'});
+    const manifestURL=URL.createObjectURL(blob);
+    const link=document.createElement('link');
+    link.rel='manifest';link.href=manifestURL;
+    document.head.appendChild(link);
+  </script>
 </head>
 <body>
-    <div id="root"></div>
+<div id="root"></div>
 
-    <!-- Script contenant l'application React traduit en direct par Babel -->
-    <script type="text/babel">
-        const { useState, useEffect } = React;
+<div id="install-banner">
+  <div class="icon">🐄</div>
+  <div class="text">
+    <strong>Installer l'application</strong>
+    <span>Accès rapide depuis l'écran d'accueil</span>
+  </div>
+  <button id="install-btn">Installer</button>
+  <button id="dismiss-btn">✕</button>
+</div>
 
-        // Base de données médicaments pré-intégrée
-        const MEDICAMENTS_BASE = [
-            { id: 1, nom: "Mastijet Udder", categorie: "Intramammaire Lactation", lait: 4, viande: 14 },
-            { id: 2, nom: "Cobactan 2.5%", categorie: "Antibiotique Injectable", lait: 0, viande: 8 },
-            { id: 3, nom: "Metacam 20mg/ml", categorie: "Anti-inflammatoire", lait: 3, viande: 15 },
-            { id: 4, nom: "Eprinex Pour-on", categorie: "Antiparasitaire", lait: 0, viande: 15 },
-            { id: 5, nom: "Cepravin Ordinaire", categorie: "Intramammaire Tarissement", lait: 0, viande: 21 }
-        ];
+<script>
+if('serviceWorker' in navigator){
+  const swCode=`
+    const CACHE='carnet-sanitaire-v1';
+    self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['./',]))));
+    self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>caches.match('./'))))); 
+  `;
+  const swBlob=new Blob([swCode],{type:'application/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(()=>{});
+}
 
-        // Liste par défaut du troupeau
-        const TROUPEAU_INITIAL = [
-            { id: 1, nom: "Adèle", numero: "FR 7302461746", naissance: "2018-04-12" },
-            { id: 2, nom: "Api", numero: "FR 7302461747", naissance: "2019-05-20" },
-            { id: 3, nom: "Aribo", numero: "FR 7302461748", naissance: "2020-02-10" },
-            { id: 4, nom: "Jalica", numero: "FR 7302461749", naissance: "2021-11-02" },
-            { id: 5, nom: "Lolita", numero: "FR 7302461750", naissance: "2015-08-30" },
-            { id: 6, nom: "Raclette", numero: "FR 7302461751", naissance: "2022-01-15" },
-            { id: 7, nom: "Tartiflette", numero: "FR 7302461752", naissance: "2022-03-22" }
-        ];
+// PWA Install prompt
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();deferredPrompt=e;
+  document.getElementById('install-banner').classList.add('show');
+});
+document.getElementById('install-btn').addEventListener('click',()=>{
+  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{deferredPrompt=null;document.getElementById('install-banner').classList.remove('show');});}
+});
+document.getElementById('dismiss-btn').addEventListener('click',()=>{
+  document.getElementById('install-banner').classList.remove('show');
+});
+window.addEventListener('appinstalled',()=>{document.getElementById('install-banner').classList.remove('show');});
+</script>
 
-        function App() {
-            const [traitements, setTraitements] = useState([]);
-            const [troupeau, setTroupeau] = useState(TROUPEAU_INITIAL);
-            const [selectedVache, setSelectedVache] = useState("");
-            const [selectedMed, setSelectedMed] = useState("");
-            const [dateDebut, setDateDebut] = useState("");
-            const [ordonnance, setOrdonnance] = useState("");
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-            // Calculer la date de libération
-            const calculerLiberation = (dateStr, joursDélai) => {
-                if (!dateStr || joursDélai === undefined) return "-";
-                const date = new Date(dateStr);
-                date.setDate(date.getDate() + joursDélai);
-                return date.toLocaleDateString('fr-FR');
-            };
+<script type="text/babel" data-presets="react">
 
-            // Vérifier si la date est dépassée
-            const estLibere = (dateStr, joursDélai) => {
-                if (!dateStr) return false;
-                const dateLib = new Date(dateStr);
-                dateLib.setDate(dateLib.getDate() + joursDélai);
-                return new Date() > dateLib;
-            };
+const VACHES_DEFAUT = [
+  { nom: "ADELE", numero: "FR 7302461746", travail: "1746", naissance: "04/02/2025" },
+  { nom: "API", numero: "FR 7302503427", travail: "3427", naissance: "16/12/2025" },
+  { nom: "ARIBO", numero: "FR 7302503428", travail: "3428", naissance: "28/12/2025" },
+  { nom: "ARIEL", numero: "FR 7302461747", travail: "1747", naissance: "18/02/2025" },
+  { nom: "ATHENA", numero: "FR 7302503430", travail: "3430", naissance: "09/01/2026" },
+  { nom: "BERGERAC", numero: "FR 7302503438", travail: "3438", naissance: "22/05/2026" },
+  { nom: "JALISCA", numero: "FR 7302124689", travail: "4689", naissance: "02/11/2014" },
+  { nom: "JIVA", numero: "FR 7302100820", travail: "0820", naissance: "17/04/2014" },
+  { nom: "LOLITA", numero: "FR 7302136325", travail: "6325", naissance: "18/12/2015" },
+  { nom: "LUCIOLE", numero: "FR 7302124698", travail: "4698", naissance: "21/04/2015" },
+  { nom: "MOUSSELINE", numero: "FR 7402656868", travail: "6868", naissance: "08/09/2016" },
+  { nom: "NEMO", numero: "FR 7402717493", travail: "7493", naissance: "15/06/2017" },
+  { nom: "NESQUICK", numero: "FR 7302153418", travail: "3418", naissance: "18/02/2017" },
+  { nom: "NOISETTE", numero: "FR 7302188780", travail: "8780", naissance: "09/11/2017" },
+  { nom: "OLAF", numero: "FR 7302255584", travail: "5584", naissance: "31/12/2018" },
+  { nom: "OLGA", numero: "FR 7302234776", travail: "4776", naissance: "15/01/2018" },
+  { nom: "OUVRIERE", numero: "FR 7302255582", travail: "5582", naissance: "13/12/2018" },
+  { nom: "PUCE", numero: "FR 7302293865", travail: "3865", naissance: "31/12/2019" },
+  { nom: "RACLETTE", numero: "FR 7302293883", travail: "3883", naissance: "20/11/2020" },
+  { nom: "RUSTINE", numero: "FR 7302293868", travail: "3868", naissance: "27/01/2020" },
+  { nom: "SHIPIE", numero: "FR 7302372783", travail: "2783", naissance: "09/12/2021" },
+  { nom: "SIDONIE", numero: "FR 7302323705", travail: "3705", naissance: "30/11/2021" },
+  { nom: "TAGADA", numero: "FR 7302372806", travail: "2806", naissance: "17/12/2022" },
+  { nom: "TARTIFLETE", numero: "FR 7302406192", travail: "6192", naissance: "20/12/2022" },
+  { nom: "TARTINE", numero: "FR 7302372792", travail: "2792", naissance: "18/03/2022" },
+  { nom: "THALIA", numero: "FR 7302372802", travail: "2802", naissance: "21/11/2022" },
+  { nom: "TOUPIE", numero: "FR 7302371093", travail: "1093", naissance: "03/06/2022" },
+  { nom: "UGOLINE", numero: "FR 7302406208", travail: "6208", naissance: "23/11/2023" },
+  { nom: "UGUETTE", numero: "FR 7302406210", travail: "6210", naissance: "01/12/2023" },
+  { nom: "VAIANA", numero: "FR 7302461738", travail: "1738", naissance: "06/12/2024" },
+  { nom: "VALDA", numero: "FR 7302461735", travail: "1735", naissance: "29/11/2024" },
+  { nom: "VALJEAN", numero: "FR 7403129860", travail: "9860", naissance: "01/10/2024" },
+  { nom: "VERVEINE", numero: "FR 7302426857", travail: "6857", naissance: "26/01/2024" },
+];
 
-            const ajouterTraitement = (e) => {
-                e.preventDefault();
-                if (!selectedVache || !selectedMed || !dateDebut) return;
+function addDays(dateStr, days) {
+  if (!dateStr || !days) return "";
+  const d = new Date(dateStr);
+  d.setDate(d.getDate() + parseInt(days, 10));
+  return d.toISOString().split("T")[0];
+}
 
-                const vache = troupeau.find(v => v.id === parseInt(selectedVache));
-                const med = MEDICAMENTS_BASE.find(m => m.id === parseInt(selectedMed));
+const JOURS_SEMAINE = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
 
-                const nouveau = {
-                    id: Date.now(),
-                    vache: vache.nom,
-                    numero: vache.numero,
-                    medicament: med.nom,
-                    dateDebut: dateDebut,
-                    laitDelai: med.lait,
-                    viandeDelai: med.viande,
-                    ordonnance: ordonnance || "Non spécifiée"
-                };
+function formatDateAvecJour(d) {
+  if (!d || d === "nan") return "—";
+  const [y, m, j] = d.split("-");
+  const date = new Date(d);
+  const jour = JOURS_SEMAINE[date.getDay()];
+  return `${jour} ${j}/${m}/${y}`;
+}
 
-                setTraitements([nouveau, ...traitements]);
-                // Réinitialiser le formulaire
-                setSelectedVache("");
-                setSelectedMed("");
-                setOrdonnance("");
-            };
+const emptyForm = {
+  nomVache: "", numeroVache: "", travailVache: "",
+  dateDebut: "", momentDebut: "matin",
+  dateFin: "", momentFin: "matin",
+  raison: "", medicament: "",
+  posologie: "", quantite: "", voieAdmin: "",
+  joursAttenteL: "", momentAttenteL: "matin",
+  joursAttenteV: "", momentAttenteV: "matin",
+  numOrdonnance: "", intervenant: "",
+  photoOrdonnance: "",
+};
 
-            return (
-                <div className="container">
-                    <header>
-                        <h1>🐄 Carnet Sanitaire Connecté</h1>
-                        <div>Élevage Bovin Laitier</div>
-                    </header>
+const MEDICAMENTS = [
+  { nom: "Mastijet (tétracycline/néomycine/bacitracine/prednisolone)", categorie: "Intramammaire lactation", lait: 4, viande: 30 },
+  { nom: "Cobactan LC (cefquinome)", categorie: "Intramammaire lactation", lait: 5, viande: 4 },
+  { nom: "Rilexine (céfalexine)", categorie: "Intramammaire lactation", lait: 3, viande: 7 },
+  { nom: "Cobastan LC (cefquinome/prednisolone)", categorie: "Intramammaire lactation", lait: 6, viande: 4 },
+  { nom: "Mastiplan LC (cefapirine/prednisolone)", categorie: "Intramammaire lactation", lait: 6, viande: 4 },
+  { nom: "Pirsue (pirlimycine)", categorie: "Intramammaire lactation", lait: 9, viande: 28 },
+  { nom: "Synulox LC (amoxicilline/acide clavulanique)", categorie: "Intramammaire lactation", lait: 4, viande: 28 },
+  { nom: "Orbenin LC (cloxacilline)", categorie: "Intramammaire lactation", lait: 5, viande: 28 },
+  { nom: "Spectramast LC (ceftiofur)", categorie: "Intramammaire lactation", lait: 2, viande: 3 },
+  { nom: "Nafpenzal LC (nafcilline/péniciline/dihydrostreptomycine)", categorie: "Intramammaire lactation", lait: 4, viande: 28 },
+  { nom: "Lincocin Forte (lincomycine/néomycine)", categorie: "Intramammaire lactation", lait: 4, viande: 30 },
+  { nom: "Bovaclox LC (amoxicilline/cloxacilline)", categorie: "Intramammaire lactation", lait: 4, viande: 28 },
+  { nom: "Ubrocel (céfuroxime)", categorie: "Intramammaire lactation", lait: 3, viande: 14 },
+  { nom: "Cepravin DC (céfalonium)", categorie: "Intramammaire tarissement", lait: 0, viande: 28 },
+  { nom: "Orbeseal (bissubnitrate de bismuth)", categorie: "Intramammaire tarissement", lait: 0, viande: 0 },
+  { nom: "Rilexine DC (céfalexine benzathine)", categorie: "Intramammaire tarissement", lait: 0, viande: 28 },
+  { nom: "Nafpenzal DC (nafcilline/péniciline G/dihydrostreptomycine)", categorie: "Intramammaire tarissement", lait: 0, viande: 28 },
+  { nom: "Cobactan DC (cefquinome)", categorie: "Intramammaire tarissement", lait: 0, viande: 28 },
+  { nom: "Bovaclox DC (amoxicilline/cloxacilline)", categorie: "Intramammaire tarissement", lait: 0, viande: 28 },
+  { nom: "Synulox DC (amoxicilline/acide clavulanique)", categorie: "Intramammaire tarissement", lait: 0, viande: 28 },
+  { nom: "Cobactan 2,5% injectable (cefquinome)", categorie: "Antibiotique injectable", lait: 1, viande: 5 },
+  { nom: "Excenel (ceftiofur)", categorie: "Antibiotique injectable", lait: 0, viande: 5 },
+  { nom: "Draxxin (tulathromycine)", categorie: "Antibiotique injectable", lait: 0, viande: 49 },
+  { nom: "Zactran (gamithromycine)", categorie: "Antibiotique injectable", lait: 0, viande: 61 },
+  { nom: "Micotil (tilmicosine)", categorie: "Antibiotique injectable", lait: 0, viande: 42 },
+  { nom: "Nuflor (florfénicol)", categorie: "Antibiotique injectable", lait: 0, viande: 37 },
+  { nom: "Advocine 180 (danofloxacine)", categorie: "Antibiotique injectable", lait: 4, viande: 8 },
+  { nom: "Baytril (enrofloxacine)", categorie: "Antibiotique injectable", lait: 108, viande: 14 },
+  { nom: "Marbocyl / Forcyl (marbofloxacine)", categorie: "Antibiotique injectable", lait: 3, viande: 3 },
+  { nom: "Synulox injectable (amoxicilline/acide clavulanique)", categorie: "Antibiotique injectable", lait: 5, viande: 54 },
+  { nom: "Amoxicilline 150 mg/ml (Amoxinsol)", categorie: "Antibiotique injectable", lait: 4, viande: 28 },
+  { nom: "Duplocilline (pénicilline G/procaïne)", categorie: "Antibiotique injectable", lait: 4, viande: 10 },
+  { nom: "Intramicine (pénicilline G/dihydrostreptomycine)", categorie: "Antibiotique injectable", lait: 7, viande: 30 },
+  { nom: "Terramycine LA (oxytétracycline)", categorie: "Antibiotique injectable", lait: 7, viande: 22 },
+  { nom: "Borgal (sulfamides/triméthoprime)", categorie: "Antibiotique injectable", lait: 8, viande: 28 },
+  { nom: "Reveacol (spiramycine)", categorie: "Antibiotique injectable", lait: 18, viande: 28 },
+  { nom: "Neopen (péniciline G/néomycine)", categorie: "Antibiotique injectable", lait: 7, viande: 30 },
+  { nom: "Penstrep (péniciline G/streptomycine)", categorie: "Antibiotique injectable", lait: 7, viande: 30 },
+  { nom: "Zuprevo (tildipirosine)", categorie: "Antibiotique injectable", lait: 0, viande: 47 },
+  { nom: "Tolfine IM (acide tolfénamique)", categorie: "AINS injectable", lait: 0, viande: 12 },
+  { nom: "Tolfine IV (acide tolfénamique)", categorie: "AINS injectable", lait: 1, viande: 4 },
+  { nom: "Metacam (méloxicam)", categorie: "AINS injectable", lait: 5, viande: 15 },
+  { nom: "Finadyne (flunixine méglumine)", categorie: "AINS injectable", lait: 2, viande: 5 },
+  { nom: "Ketofen (kétoprofène)", categorie: "AINS injectable", lait: 0, viande: 4 },
+  { nom: "Rimadyl (carprofène)", categorie: "AINS injectable", lait: 0, viande: 21 },
+  { nom: "Dexadreson (dexaméthasone)", categorie: "Corticoïde injectable", lait: 3, viande: 8 },
+  { nom: "Prednisolone injectable", categorie: "Corticoïde injectable", lait: 3, viande: 7 },
+  { nom: "Vetalgin (métamizole)", categorie: "AINS injectable", lait: 1, viande: 1 },
+  { nom: "Ivomec (ivermectine)", categorie: "Antiparasitaire", lait: 0, viande: 49 },
+  { nom: "Eprinex (éprinomectine)", categorie: "Antiparasitaire", lait: 0, viande: 15 },
+  { nom: "Dectomax (doramectine)", categorie: "Antiparasitaire", lait: 0, viande: 70 },
+  { nom: "Cydectin (moxidectine)", categorie: "Antiparasitaire", lait: 0, viande: 20 },
+  { nom: "Panacur (fenbendazole)", categorie: "Antiparasitaire", lait: 6, viande: 11 },
+  { nom: "Rintal (fébantel)", categorie: "Antiparasitaire", lait: 7, viande: 8 },
+  { nom: "Synanthic (oxfendazole)", categorie: "Antiparasitaire", lait: 7, viande: 15 },
+  { nom: "Valbazen (albendazole)", categorie: "Antiparasitaire", lait: 4, viande: 14 },
+  { nom: "Douvistome (oxyclozanide)", categorie: "Antiparasitaire", lait: 5, viande: 13 },
+  { nom: "Ripercol (lévamisole)", categorie: "Antiparasitaire", lait: 3, viande: 14 },
+  { nom: "Closantel (Flukiver)", categorie: "Antiparasitaire", lait: 0, viande: 28 },
+  { nom: "Calcium Gluconate", categorie: "Minéraux/Vitamines", lait: 0, viande: 0 },
+  { nom: "Magnésium Sulfate", categorie: "Minéraux/Vitamines", lait: 0, viande: 0 },
+  { nom: "Ocytocine (Oxytocine)", categorie: "Hormonal", lait: 0, viande: 1 },
+  { nom: "Estrumate (prostaglandine PGF2α)", HRM: "Hormonal", lait: 0, viande: 1 },
+  { nom: "Vitamine AD3E", categorie: "Minéraux/Vitamines", lait: 0, viande: 0 },
+  { nom: "Lidocaïne (anesthésie locale)", categorie: "Anesthésie", lait: 15, viande: 28 },
+];
 
-                    <div className="grid">
-                        {/* Formulaire d'enregistrement */}
-                        <div className="card">
-                            <h2>Enregistrer un traitement</h2>
-                            <form onSubmit={ajouterTraitement}>
-                                <div className="form-group">
-                                    <label>Animal</label>
-                                    <select value={selectedVache} onChange={(e) => setSelectedVache(e.target.value)} required>
-                                        <option value="">-- Choisir une vache --</option>
-                                        {troupeau.map(v => (
-                                            <option key={v.id} value={v.id}>{v.nom} ({v.numero})</option>
-                                        ))}
-                                    </select>
-                                </div>
+const DRIVE_FILE_NAME = "carnet-sanitaire-bovin.json";
 
-                                <div className="form-group">
-                                    <label>Médicament</label>
-                                    <select value={selectedMed} onChange={(e) => setSelectedMed(e.target.value)} required>
-                                        <option value="">-- Choisir le traitement --</option>
-                                        {MEDICAMENTS_BASE.map(m => (
-                                            <option key={m.id} value={m.id}>{m.nom} ({m.categorie})</option>
-                                        ))}
-                                    </select>
-                                </div>
+function getDateAttenteL(r) { return r.joursAttenteL ? addDays(r.dateDebut, r.joursAttenteL) : ""; }
+function getDateAttenteV(r) { return r.joursAttenteV ? addDays(r.dateDebut, r.joursAttenteV) : ""; }
 
-                                <div className="form-group">
-                                    <label>Date de début du traitement</label>
-                                    <input type="date" value={dateDebut} onChange={(e) => setDateDebut(e.target.value)} required />
-                                </div>
+function StatusBadge({ record }) {
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const dL = getDateAttenteL(record) ? new Date(getDateAttenteL(record)) : null;
+  const dV = getDateAttenteV(record) ? new Date(getDateAttenteV(record)) : null;
+  const ok = (!dL || today > dL) && (!dV || today > dV);
+  return ok
+    ? <span style={{ background: "#d4edda", color: "#1a5c2a", borderRadius: 20, padding: "3px 12px", fontSize: 11, fontWeight: 700, letterSpacing: 1, whiteSpace: "nowrap" }}>✓ LIBÉRÉ</span>
+    : <span style={{ background: "#fff3cd", color: "#7a4f00", borderRadius: 20, padding: "3px 12px", fontSize: 11, fontWeight: 700, letterSpacing: 1, whiteSpace: "nowrap" }}>⚠ EN ATTENTE</span>;
+}
 
-                                <div className="form-group">
-                                    <label>N° Ordonnance / Commentaire</label>
-                                    <input type="text" value={ordonnance} onChange={(e) => setOrdonnance(e.target.value)} placeholder="Ex: ORD-2026-001" />
-                                </div>
+function formatDate(d) {
+  if (!d || d === "nan") return "—";
+  const [y, m, j] = d.split("-");
+  return `${j}/${m}/${y}`;
+}
 
-                                <button type="submit">Valider le traitement</button>
-                            </form>
-                        </div>
-
-                        {/* Synthèse des délais d'attente en cours */}
-                        <div className="card">
-                            <h2>Délais réglementaires (Aperçu)</h2>
-                            <p style={{fontSize: '0.9em', color: '#666'}}>Les délais sont calculés automatiquement d'après les bases réglementaires ANSES.</p>
-                            <ul>
-                                {MEDICAMENTS_BASE.map(m => (
-                                    <li key={m.id} style={{marginBottom: '10px'}}>
-                                        <strong>{m.nom}</strong> : Lait : {m.lait} j | Viande : {m.viande} j
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-
-                    {/* Historique et suivi de libération */}
-                    <div className="card">
-                        <h2>Traitements en cours et historique</h2>
-                        {traitements.length === 0 ? (
-                            <p>Aucun traitement enregistré pour le moment.</p>
-                        ) : (
-                            <div style={{overflowX: 'auto'}}>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Animal</th>
-                                            <th>Traitement</th>
-                                            <th>Date début</th>
-                                            <th>Libération LAIT</th>
-                                            <th>Libération VIANDE</th>
-                                            <th>Ordonnance</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {traitements.map(t => (
-                                            <tr key={t.id}>
-                                                <td><strong>{t.vache}</strong><br/><small style={{color:'#666'}}>{t.numero}</small></td>
-                                                <td>{t.medicament}</td>
-                                                <td>{new Date(t.dateDebut).toLocaleDateString('fr-FR')}</td>
-                                                <td>
-                                                    <span className={`badge ${estLibere(t.dateDebut, t.laitDelai) ? 'badge-success' : 'badge-danger'}`}>
-                                                        {calculerLiberation(t.dateDebut, t.laitDelai)} {estLibere(t.dateDebut, t.laitDelai) ? ' ✓' : ' ⚠'}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <span className={`badge ${estLibere(t.dateDebut, t.viandeDelai) ? 'badge-success' : 'badge-danger'}`}>
-                                                        {calculerLiberation(t.dateDebut, t.viandeDelai)} {estLibere(t.dateDebut, t.viandeDelai) ? ' ✓' : ' ⚠'}
-                                                    </span>
-                                                </td>
-                                                <td><small>{t.ordonnance}</small></td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        )}
-                    </div>
+function VacheSelector({ value, onChange, vaches }) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const liste = vaches || VACHES_DEFAUT;
+  const vache = liste.find(v => v.nom === value);
+  const filtered = liste.filter(v =>
+    v.nom.toLowerCase().includes(query.toLowerCase()) ||
+    v.travail.includes(query) ||
+    v.numero.includes(query)
+  );
+  const select = (v) => { onChange(v); setOpen(false); setQuery(""); };
+  return (
+    <div style={{ position: "relative" }}>
+      <div onClick={() => setOpen(o => !o)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 14px", borderRadius: 8, border: "2px solid #d4e8d4", fontSize: 14, fontFamily: "sans-serif", color: "#1a3a1a", background: "#f7fbf7", cursor: "pointer", justifyContent: "space-between" }}>
+        {vache ? (
+          <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+            <span style={{ fontSize: 18 }}>🐄</span>
+            <div>
+              <div style={{ fontWeight: 800, fontSize: 15 }}>{vache.nom}</div>
+              <div style={{ fontSize: 11, color: "#5a7a5a" }}>{vache.numero} · N° travail : {vache.travail}</div>
+            </div>
+          </div>
+        ) : <span style={{ color: "#8aaa8a" }}>Sélectionner une vache…</span>}
+        <span style={{ color: "#5a7a5a", fontSize: 12 }}>{open ? "▲" : "▼"}</span>
+      </div>
+      {open && (
+        <div style={{ position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0, zIndex: 999, background: "#fff", borderRadius: 10, border: "2px solid #d4e8d4", boxShadow: "0 8px 32px #0002", maxHeight: 300, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+          <div style={{ padding: "8px 10px", borderBottom: "1px solid #e8f0e8" }}>
+            <input autoFocus value={query} onChange={e => setQuery(e.target.value)} placeholder="🔍 Rechercher nom, N° travail…"
+              style={{ width: "100%", padding: "7px 10px", borderRadius: 6, border: "1px solid #d4e8d4", fontSize: 13, fontFamily: "sans-serif", outline: "none", boxSizing: "border-box" }} />
+          </div>
+          <div style={{ overflowY: "auto", maxHeight: 240 }}>
+            {filtered.length === 0
+              ? <div style={{ padding: 16, textAlign: "center", color: "#8aaa8a", fontSize: 13, fontFamily: "sans-serif" }}>Aucune vache trouvée</div>
+              : filtered.map(v => (
+                <div key={v.numero} onClick={() => select(v)}
+                  style={{ padding: "9px 14px", cursor: "pointer", display: "flex", gap: 10, alignItems: "center", borderBottom: "1px solid #f0f7f0", background: v.nom === value ? "#e8f5e9" : "transparent" }}
+                  onMouseEnter={e => e.currentTarget.style.background = "#f0f9f0"}
+                  onMouseLeave={e => e.currentTarget.style.background = v.nom === value ? "#e8f5e9" : "transparent"}>
+                  <span style={{ fontSize: 20 }}>🐄</span>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: 14, fontFamily: "sans-serif", color: "#1a3a1a" }}>{v.nom}</div>
+                    <div style={{ fontSize: 11, color: "#7a9a7a", fontFamily: "sans-serif" }}>{v.numero} · N° travail : {v.travail} · Née le {v.naissance}</div>
+                  </div>
                 </div>
-            );
-        }
+              ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
-        // Rendu officiel dans le navigateur via l'élément #root (Résout l'erreur Unexpected Token 'export')
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+function MenuPanel({ open, onClose, vaches, onImportVaches, onImportSauvegarde, onExportSauvegarde, onExportVachesCSV, records, onDriveSave, onDriveRestore, driveLoading }) {
+  const csvInputRef = useRef(null);
+  const jsonInputRef = useRef(null);
+
+  const handleCSV = (e) => {
+    const file = e.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const text = ev.target.result;
+      const lines = text.split(/\r?\n/).filter(Boolean);
+      const sep = lines[0].includes(";") ? ";" : ",";
+      const headers = lines[0].split(sep).map(h => h.replace(/[="]/g, "").trim().toLowerCase());
+      const nomIdx = headers.findIndex(h => h.includes("nom"));
+      const numIdx = headers.findIndex(h => h === "n°" || h.startsWith("n°") || h === "numero" || h.includes("national"));
+      const travailIdx = headers.findIndex(h => h.includes("travail"));
+      const naissIdx = headers.findIndex(h => h.includes("naissance") || h.includes("né"));
+      if (nomIdx === -1) { alert("Colonne 'Nom' introuvable."); return; }
+      const parsed = lines.slice(1).map(line => {
+        const cols = line.split(sep).map(c => c.replace(/[="]/g, "").trim());
+        return {
+          nom: (cols[nomIdx] || "").toUpperCase(),
+          numero: numIdx >= 0 ? cols[numIdx] : "",
+          travail: travailIdx >= 0 ? cols[travailIdx] : "",
+          naissance: naissIdx >= 0 ? cols[naissIdx] : "",
+        };
+      }).filter(v => v.nom && v.nom !== "NAN" && v.nom.length > 1);
+      onImportVaches(parsed);
+      onClose();
+    };
+    reader.readAsText(file, "latin-1");
+    e.target.value = "";
+  };
+
+  const handleJSON = (e) => {
+    const file = e.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (data.records) { onImportSauvegarde(data.records); onClose(); }
+        else alert("Format de sauvegarde invalide.");
+      } catch { alert("Fichier JSON invalide."); }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  };
+
+  const downloadJSON = () => {
+    const blob = new Blob([JSON.stringify({ version: 1, savedAt: new Date().toISOString(), records }, null, 2)], { type: "application/json" });
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+    a.download = `carnet-sanitaire-${new Date().toISOString().slice(0,10)}.json`; a.click();
+  };
+
+  const downloadVachesCSV = () => {
+    const header = "Nom;Numéro;N° travail;Date naissance";
+    const rows = vaches.map(v => `${v.nom};${v.numero};${v.travail};${v.naissance}`);
+    const blob = new Blob([header + "\n" + rows.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+    a.download = "troupeau.csv"; a.click();
+  };
+
+  if (!open) return null;
+  return (
+    <div style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex" }}>
+      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "#0006" }} />
+      <div style={{ position: "relative", width: 320, background: "#fff", height: "100%", boxShadow: "4px 0 32px #0003", display: "flex", flexDirection: "column", overflowY: "auto" }}>
+        <div style={{ background: "linear-gradient(135deg,#1a3a1a,#2d5a27)", padding: "20px 20px 16px", flexShrink: 0 }}>
+          <div style={{ display: "flex", justifySpaceBetween: "space-between", alignItems: "center" }}>
+            <div>
+              <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "#a8d5a2", fontFamily: "sans-serif" }}>Navigation</div>
+              <div style={{ color: "#fff", fontSize: 18, fontWeight: 900, marginTop: 2 }}>⚙️ Menu</div>
+            </div>
+            <button onClick={onClose} style={{ background: "#ffffff22", border: "none", color: "#fff", borderRadius: 8, padding: "5px 10px", cursor: "pointer", fontSize: 17 }}>✕</button>
+          </div>
+          <div style={{ marginTop: 12, display: "flex", gap: 8 }}>
+            <div style={{ flex: 1, background: "#ffffff18", borderRadius: 8, padding: "8px 10px", textAlign: "center", fontFamily: "sans-serif" }}>
+              <div style={{ fontSize: 18, fontWeight: 900, color: "#fff" }}>{vaches.length}</div>
+              <div style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "#a8d5a2" }}>Vaches</div>
+            </div>
+            <div style={{ flex: 1, background: "#ffffff18", borderRadius: 8, padding: "8px 10px", textAlign: "center", fontFamily: "sans-serif" }}>
+              <div style={{ fontSize: 18, fontWeight: 900, color: "#fff" }}>{records.length}</div>
+              <div style={{ fontSize: 9, letterSpacing: 2, textTransform: "uppercase", color: "#a8d5a2" }}>Traitements</div>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ padding: 16, flex: 1 }}>
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: 2, textTransform: "uppercase", color: "#5a7a5a", fontFamily: "sans-serif", marginBottom: 10, paddingBottom: 6, borderBottom: "1px solid #e8f0e8" }}>
+              🐄 Troupeau
+            </div>
+            <div style={{ background: "#f7fbf7", borderRadius: 10, padding: "10px 12px", marginBottom: 10, maxHeight: 160, overflowY: "auto" }}>
+              {vaches.length === 0 ? (
+                <div style={{ color: "#8aaa8a", fontSize: 12, fontFamily: "sans-serif", textAlign: "center", padding: 8 }}>Aucune vache</div>
+              ) : vaches.map(v => (
+                <div key={v.numero || v.nom} style={{ display: "flex", justifyContent: "space-between", padding: "4px 0", borderBottom: "1px solid #eef4ee", fontFamily: "sans-serif" }}>
+                  <span style={{ fontWeight: 700, fontSize: 13, color: "#1a3a1a" }}>🐄 {v.nom}</span>
+                  <span style={{ fontSize: 11, color: "#7a9a7a" }}>{v.travail}</span>
+                </div>
+              ))}
+            </div>
+            <input ref={csvInputRef} type="file" accept=".csv,.txt" style={{ display: "none" }} onChange={handleCSV} />
+            <button onClick={() => csvInputRef.current?.click()} style={{ width: "100%", marginBottom: 8, padding: "10px 14px", borderRadius: 9, border: "2px solid #2d5a27", background: "#fff", color: "#2d5a27", fontWeight: 700, fontSize: 13, cursor: "pointer", fontFamily: "sans-serif" }}>📥 Importer troupeau (CSV Boviclic)</button>
+            <button onClick={downloadVachesCSV} style={{ width: "100%", padding: "10px 14px", borderRadius: 9, border: "1px solid #d4e8d4", background: "#f7fbf7", color: "#3a5a3a", fontWeight: 600, fontSize: 13, cursor: "pointer", fontFamily: "sans-serif" }}>📤 Exporter troupeau (CSV)</button>
+          </div>
+
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: 2, textTransform: "uppercase", color: "#5a7a5a", fontFamily: "sans-serif", marginBottom: 10, paddingBottom: 6, borderBottom: "1px solid #e8f0e8" }}>
+              💾 Sauvegarde locale
+            </div>
+            <input ref={jsonInputRef} type="file" accept=".json" style={{ display: "none" }} onChange={handleJSON} />
+            <button onClick={() => jsonInputRef.current?.click()} style={{ width: "100%", marginBottom: 8, padding: "10px 14px", borderRadius: 9, border: "2px solid #1565c0", background: "#fff", color: "#1565c0", fontWeight: 700, fontSize: 13, cursor: "pointer", fontFamily: "sans-serif" }}>📥 Importer sauvegarde (JSON)</button>
+            <button onClick={downloadJSON} style={{ width: "100%", padding: "10px 14px", borderRadius: 9, border: "1px solid #bbdefb", background: "#f3f8ff", color: "#1565c0", fontWeight: 600, fontSize: 13, cursor: "pointer", fontFamily: "sans-serif" }}>📤 Exporter sauvegarde (JSON)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PhotoDropZone({ onImage }) {
+  const [dragging, setDragging] = useState(false);
+  const [error, setError] = useState("");
+  const processFile = (file) => {
+    if (!file || !file.type.startsWith("image/")) { setError("Fichier non reconnu."); return; }
+    const reader = new FileReader(); reader.onload = ev => onImage(ev.target.result); reader.readAsDataURL(file);
+  };
+  return (
+    <div onDrop={e => { e.preventDefault(); setDragging(false); processFile(e.dataTransfer.files[0]); }} onDragOver={e => { e.preventDefault(); setDragging(true); }} onDragLeave={() => setDragging(false)}
+      style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 10, padding: "28px 20px", borderRadius: 10, border: `2px dashed ${dragging ? "#2d5a27" : "#b8d8b8"}`, background: dragging ? "#e8f5e9" : "#f7fbf7", transition: "all 0.2s" }}>
+      <span style={{ fontSize: 40 }}>📄</span>
+      <div style={{ fontFamily: "sans-serif", fontSize: 14, color: "#3a5a3a", fontWeight: 700 }}>Glissez-déposez l'ordonnance ici</div>
+    </div>
+  );
+}
+
+// L'application React d'origine simplifiée pour l'exécution
+function MainApp() {
+  const [vaches, setVaches] = useState(() => {
+    const loc = localStorage.getItem("carnet_vaches");
+    return loc ? JSON.parse(loc) : VACHES_DEFAUT;
+  });
+  const [records, setRecords] = useState(() => {
+    const loc = localStorage.getItem("carnet_records");
+    return loc ? JSON.parse(loc) : [];
+  });
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [form, setForm] = useState(emptyForm);
+  const [editingId, setEditingId] = useState(null);
+  const [search, setSearch] = useState("");
+  const [confirmDelete, setConfirmDelete] = useState(null);
+
+  useEffect(() => { localStorage.setItem("carnet_vaches", JSON.stringify(vaches)); }, [vaches]);
+  useEffect(() => { localStorage.setItem("carnet_records", JSON.stringify(records)); }, [records]);
+
+  const handleSelectVache = (v) => {
+    setForm(f => ({ ...f, nomVache: v.nom, numeroVache: v.numero, travailVache: v.travail }));
+  };
+
+  const handleSelectMed = (e) => {
+    const m = MEDICAMENTS.find(med => med.nom === e.target.value);
+    if(m) setForm(f => ({ ...f, medicament: m.nom, joursAttenteL: m.lait, joursAttenteV: m.viande }));
+    else setForm(f => ({ ...f, medicament: e.target.value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!form.nomVache) { alert("Veuillez sélectionner une vache."); return; }
+    if (editingId) {
+      setRecords(records.map(r => r.id === editingId ? { ...form, id: editingId } : r));
+      setEditingId(null);
+    } else {
+      setRecords([{ ...form, id: Date.now().toString() }, ...records]);
+    }
+    setForm(emptyForm);
+  };
+
+  const handleEdit = (r) => { setEditingId(r.id); setForm(r); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+  const handleDelete = (id) => { setRecords(records.filter(r => r.id !== id)); setConfirmDelete(null); };
+
+  const filteredRecords = records.filter(r => 
+    r.nomVache.toLowerCase().includes(search.toLowerCase()) ||
+    r.travailVache.includes(search) ||
+    r.medicament.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div style={{ padding: "16px", maxWidth: 800, margin: "0 auto" }}>
+      <header style={{ background: "#1a3a1a", color: "#fff", padding: "14px", borderRadius: "10px", display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+        <h1 style={{ fontSize: "18px" }}>🐄 Carnet Sanitaire</h1>
+        <button onClick={() => setMenuOpen(true)} style={{ background: "#ffffff22", border: "none", color: "#fff", padding: "6px 12px", borderRadius: "6px", cursor: "pointer" }}>⚙️ Menu</button>
+      </header>
+
+      <MenuPanel open={menuOpen} onClose={() => setMenuOpen(false)} vaches={vaches} records={records} onImportVaches={setVaches} onImportSauvegarde={setRecords} />
+
+      <div style={{ background: "#fff", padding: "16px", borderRadius: "10px", boxShadow: "0 2px 8px rgba(0,0,0,0.05)", marginBottom: "16px" }}>
+        <h2>{editingId ? "📝 Modifier le traitement" : "➕ Nouveau traitement"}</h2>
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "12px" }}>
+          <label style={{ fontWeight: "bold" }}>Rechercher l'animal :</label>
+          <VacheSelector value={form.nomVache} onChange={handleSelectVache} vaches={vaches} />
+
+          <label style={{ fontWeight: "bold" }}>Médicament :</label>
+          <select value={form.medicament} onChange={handleSelectMed} style={{ padding: "10px", borderRadius: "6px", border: "1px solid #ccc" }}>
+            <option value="">-- Sélectionner un produit --</option>
+            {MEDICAMENTS.map(m => <option key={m.nom} value={m.nom}>{m.nom}</option>)}
+          </select>
+
+          <div style={{ display: "flex", gap: "10px" }}>
+            <div style={{ flex: 1 }}>
+              <label style={{ fontWeight: "bold" }}>Délai Lait (jours) :</label>
+              <input type="number" value={form.joursAttenteL} onChange={e => setForm({ ...form, joursAttenteL: e.target.value })} style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #ccc" }} />
+            </div>
+            <div style={{ flex: 1 }}>
+              <label style={{ fontWeight: "bold" }}>Délai Viande (jours) :</label>
+              <input type="number" value={form.joursAttenteV} onChange={e => setForm({ ...form, joursAttenteV: e.target.value })} style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #ccc" }} />
+            </div>
+          </div>
+
+          <label style={{ fontWeight: "bold" }}>Date de début :</label>
+          <input type="date" value={form.dateDebut} onChange={e => setForm({ ...form, dateDebut: e.target.value })} required style={{ padding: "8px", borderRadius: "6px", border: "1px solid #ccc" }} />
+
+          <button type="submit" style={{ background: "#2d5a27", color: "#fff", border: "none", padding: "12px", borderRadius: "6px", fontWeight: "bold", cursor: "pointer", fontSize: "15px" }}>
+            {editingId ? "Enregistrer les modifications" : "Valider le traitement"}
+          </button>
+        </form>
+      </div>
+
+      <div style={{ background: "#fff", padding: "16px", borderRadius: "10px", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
+        <h2>📋 Suivi des traitements ({filteredRecords.length})</h2>
+        <input type="text" placeholder="🔍 Filtrer par vache, numéro, traitement..." value={search} onChange={e => setSearch(e.target.value)} style={{ width: "100%", padding: "10px", borderRadius: "6px", border: "1px solid #ccc", marginTop: "10px", marginBottom: "16px" }} />
+        
+        {filteredRecords.map(r => (
+          <div key={r.id} style={{ borderBottom: "1px solid #eee", padding: "12px 0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div>
+              <div style={{ fontWeight: "bold", color: "#1a3a1a" }}>🐄 {r.nomVache} ({r.travailVache})</div>
+              <div style={{ fontSize: "13px", color: "#555" }}>{r.medicament} — Début : {formatDate(r.dateDebut)}</div>
+              <div style={{ fontSize: "11px", color: "#888", marginTop: "4px" }}>
+                🥛 Libération Lait : {formatDate(getDateAttenteL(r)) || "Immédiat"} | 🥩 Viande : {formatDate(getDateAttenteV(r)) || "Immédiat"}
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+              <StatusBadge record={r} />
+              <button onClick={() => handleEdit(r)} style={{ background: "#e8f5e9", border: "none", color: "#2d5a27", padding: "6px", borderRadius: "4px", cursor: "pointer" }}>✎</button>
+              <button onClick={() => { if(confirm("Supprimer ce traitement ?")) handleDelete(r.id); }} style={{ background: "#ffebee", border: "none", color: "#c62828", padding: "6px", borderRadius: "4px", cursor: "pointer" }}>🗑</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// REMPLACEMENT DE L'EXPORT CRITIQUÉ PAR LE CHARGEMENT DIRECT REACT 18
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<MainApp />);
+
+</script>
 </body>
 </html>
